@@ -17,12 +17,21 @@ export default {
   @import "~@/common/stylus/mixin";
   
   .m-header
+    display flex
+    flex-direction row
+    justify-content center
+    align-items center
     position relative
     height 44px
     text-align center
     color $color-theme
-    
-
-
+    .icon 
+      bg-image("./images/logo")
+      width: 30px
+      height: 32px
+      margin-right: 9px
+      background-size: 30px 32px
+    .text
+      font-size: $font-size-large
 
 </style>
