@@ -6,7 +6,11 @@
     </slot>
   </div>
   <div class="dots">
-
+    <span class="dot" v-for="(item, index) in dots" 
+    v-bind:class="{active: (currentPageIndex === index)}"
+    :key="index">
+      
+    </span>
   </div>
 </div>
 </template>
@@ -18,6 +22,12 @@ import {
 } from '@/common/js/dom';
 
 export default {
+  data() {
+    return {
+      dots: [],
+      currentPageIndex: 0
+    }
+  },
   props: {
     loop: {
       type: Boolean,
@@ -32,14 +42,34 @@ export default {
       default: 4000
     }
   },
+  deactivated() {
+    this.slider.disable()
+    clearTimeout(this.timer)
+  },
+  beforeDestroy() {
+    this.slider.disable()
+    clearTimeout(this.timer)
+  },
   mounted() {
     setTimeout(() => {
       this._setSliderWidth();
+      this._initDots();
       this._initSlider();
+      if (this.autoPlay) {
+        this._play()
+      }
     }, 20)
+
+    window.addEventListener('resize', ()=> {
+      if (!this.slider) {
+        return;
+      }
+      this._setSliderWidth(true)
+      this.slider.refresh()
+    })
   },
   methods: {
-    _setSliderWidth() {
+    _setSliderWidth(isResize) {
       this.children = this.$refs.sliderGroup.children
       let width = 0
       let silderWidth = this.$refs.slider.clientWidth
@@ -50,10 +80,13 @@ export default {
         width += silderWidth
       }
 
-      if (this.loop) {
+      if (this.loop && !isResize) {
         width += 2 * silderWidth
       }
       this.$refs.sliderGroup.style.width = width + 'px'
+    },
+    _initDots() {
+      this.dots = new Array(this.children.length)
     },
     _initSlider() {
       this.slider = new BScroll(
@@ -67,8 +100,20 @@ export default {
             speed: 400,
           },
           click: true
+        })
+      this.slider.on('scrollEnd', () => {
+        let pageIndex = this.slider.getCurrentPage().pageX
+        this.currentPageIndex = pageIndex
+        if (this.autoPlay) {
+          this._play()
         }
-      )
+      })
+    },
+    _play() {
+      clearTimeout(this.timer)
+      this.timer = setTimeout(() => {
+        this.slider.next(400);
+      }, this.interval);
     }
   }
 
@@ -79,6 +124,7 @@ export default {
 
   @import "~@/common/stylus/variable";
   .slider
+    position relative
     min-height 1px
     .slider-group
       position relative
@@ -96,6 +142,25 @@ export default {
         img 
           display block
           width 100%
+    .dots
+      position absolute
+      right 0
+      left 0
+      bottom 12px
+      font-size 0
+      text-align center
+      .dot
+        margin 0 4px
+        display inline-block
+        border-radius 50%
+        background-color $color-text-l
+        width 8px
+        height 8px
+        &.active
+          width 20px
+          border-radius 5px
+          background-color $color-text-ll
+
 
 
 </style>
