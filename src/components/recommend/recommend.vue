@@ -3,28 +3,31 @@
     <scroll class="recommend-content" :data="discList">
       <div>
         <div v-if="recommends.length" class="slider-wrapper">
-        <slider>
-          <div v-for="item in recommends" :key="item.id">
-            <a :href="item.linkUrl">
-              <img :src="item.picUrl" alt="">
-            </a>
-          </div>
-        </slider>
-      </div>
-      <div class="recommend-list">
-        <div class="list-title">热门歌单推荐</div>
-        <ul>
-          <li class="item" v-for="item in discList" :key="item.id">
-            <div class="icon">
-              <img :src="item.imgurl">
+          <slider>
+            <div v-for="item in recommends" :key="item.id">
+              <a :href="item.linkUrl">
+                <img class="needsclick" :src="item.picUrl" alt="">
+              </a>
             </div>
-            <div class="text">
-              <h2 class="name" v-html="item.creator.name"></h2>
-              <p class="desc" v-html="item.dissname"></p>
-            </div>
-          </li>
-        </ul>
+          </slider>
+        </div>
+        <div class="recommend-list">
+          <div class="list-title">热门歌单推荐</div>
+          <ul>
+            <li class="item" v-for="item in discList" :key="item.id">
+              <div class="icon">
+                <img v-lazy="item.imgurl">
+              </div>
+              <div class="text">
+                <h2 class="name" v-html="item.creator.name"></h2>
+                <p class="desc" v-html="item.dissname"></p>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
+      <div class="loading-container" v-show="!discList.length">
+        <loading></loading>
       </div>
     </scroll>
   </div>
@@ -33,6 +36,7 @@
 <script>
   import Slider from '@/base/slider/slider'
   import Scroll from '@/base/scroll/scroll'
+  import Loading from '@/base/loading/loading'
 
   import {getRecommend, getDiscList} from '@/api/recommend'
   import {ERR_OK} from '@/api/config'
@@ -50,7 +54,8 @@
     },
     components: {
       Slider,
-      Scroll
+      Scroll,
+      Loading
     },
     methods: {
       _getRecommend() {
@@ -113,5 +118,10 @@
             color $color-text
           .desc
             color $color-text-d
+    .loading-container
+      position absolute
+      top 50%
+      width 100%
+      transform translateY(-50%)
     
 </style>

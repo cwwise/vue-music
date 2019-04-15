@@ -14,11 +14,11 @@ export default {
     },
     data: {
       type: Array,
-      default: []
+      default: null
     }
   },
   mounted() {
-    setInterval(() => {
+    setTimeout(() => {
       this._initScroll()
     }, 20);
   },

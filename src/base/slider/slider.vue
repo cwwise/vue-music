@@ -43,11 +43,9 @@ export default {
     }
   },
   deactivated() {
-    this.slider.disable()
     clearTimeout(this.timer)
   },
   beforeDestroy() {
-    this.slider.disable()
     clearTimeout(this.timer)
   },
   mounted() {
