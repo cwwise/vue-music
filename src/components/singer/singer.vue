@@ -31,9 +31,7 @@
       _getSingerList() {
         getSingerList().then((res) => {
           if (res.code === ERR_OK) {
-            this.singers = this._normalizeSinger(res.data.list)  
-            console.log(this.singers);
-                      
+            this.singers = this._normalizeSinger(res.data.list)                
           }
         })
       },
@@ -50,6 +48,7 @@
             map.hot.items.push(new Singer({
               id: item.Fsinger_id,
               name: item.Fsinger_name,
+              mid: item.Fsinger_mid
             }))
           }
           // 如果对应数据不存在，则初始化一个值
@@ -63,6 +62,7 @@
           map[key].items.push(new Singer({
               id: item.Fsinger_id,
               name: item.Fsinger_name,
+              mid: item.Fsinger_mid
           }))
         });
         
@@ -77,6 +77,7 @@
             hot.push(value)
           }
         }
+        // 排序
         ret.sort((a, b) => {
           return a.title.charCodeAt(0) - b.title.charCodeAt(0)
         })
