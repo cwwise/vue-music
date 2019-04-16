@@ -1,4 +1,5 @@
 'use strict'
+
 const path = require('path')
 
 function resolve (dir) {
@@ -12,12 +13,12 @@ module.exports = {
       extensions: ['.js', '.vue', '.json'],
       // 别名配置
       alias: {
-        // @ is an alias to /src
         '@': resolve('src'),
       }
     },
   },
   devServer: {
+    // 配置代理
     proxy: {
       '/api': {
         target: 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg', //对应自己的接口
@@ -32,5 +33,6 @@ module.exports = {
       }
     }
   },
+  // 打包地址
   publicPath: process.env.NODE_ENV === 'production' ? '/music/' : '/'
 }

@@ -8,6 +8,7 @@ import Search from '@/components/search/search'
 
 Vue.use(Router);
 
+// 配置路由
 export default new Router({
   routes: [
     { path: '/', redirect: '/recommend' },

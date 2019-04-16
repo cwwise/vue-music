@@ -1,28 +1,36 @@
 <template>
-  <scorll class="listView" :data="data"> 
+  <scroll class="listview" :data="data"> 
     <ul>
-      <li v-for="group in data" :key="group.id"></li>
+      <li v-for="group in data" :key="group.id">
+        <p>{{group.title}}</p>
+        <ul>
+          <li v-for="item in group.items" :key="item.id">
+            <p>{{item.name}}</p>
+          </li>
+        </ul>
+      </li>
     </ul>
-  </scorll>
+  </scroll>
 </template>
 
 <script>
 
-import Scorll from '@/base/scorll/scorll'
+import Scroll from '@/base/scroll/scroll'
 
 export default {
   props: {
     data: {
       type: Array,
-      default: []
+      default: null
     }
   },
   components: {
-    Scorll
+    Scroll
   }
 }
 </script>
 
 <style lang="stylus" scoped>
 
+  
 </style>

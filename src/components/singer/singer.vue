@@ -1,5 +1,8 @@
 <template>
   <div class="singer">
+    <listview class="listview" :data="singers"> 
+
+    </listview>
   </div>
 </template>
 
@@ -7,6 +10,7 @@
   import { getSingerList } from '@/api/singer'
   import Singer from '@/common/js/singer'
   import {ERR_OK} from '@/api/config'
+  import Listview from "@/base/listview/listview";
 
   const Hot_Length = 10
   const Hot_Title = '热门'
@@ -20,13 +24,16 @@
     created() {
       this._getSingerList()
     },
+    components: {
+      Listview
+    },
     methods: {
       _getSingerList() {
         getSingerList().then((res) => {
           if (res.code === ERR_OK) {
-            this.singers = this._normalizeSinger(res.data.list)
+            this.singers = this._normalizeSinger(res.data.list)  
             console.log(this.singers);
-            
+                      
           }
         })
       },
@@ -70,7 +77,6 @@
             hot.push(value)
           }
         }
-
         ret.sort((a, b) => {
           return a.title.charCodeAt(0) - b.title.charCodeAt(0)
         })
@@ -82,5 +88,13 @@
 </script>
 
 <style lang="stylus" scoped>
+  .singer
+    position: fixed
+    width: 100%
+    top: 88px
+    bottom: 0
+    .listview
+      height: 100%
+      overflow: hidden 
 
 </style>
