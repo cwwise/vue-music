@@ -26,6 +26,7 @@ export default {
   .tab
     display flex
     height 44px
+    z-index 10
     line-height 44px
     font-size $font-size-medium
     .tab-item

@@ -22,8 +22,11 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "./common/stylus/variable";
-#app {
-  color: $color-theme
-}
+ @import "~@/common/stylus/variable";
+
+  #app
+    color $color-theme
+  .mtab
+    z-index 100
+
 </style>

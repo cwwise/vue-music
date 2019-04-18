@@ -24,6 +24,11 @@
         </li>
       </ul>
     </div>
+
+    <div v-show="fixedTitle" class="list-fixed" ref="fixed">
+      <h1 class="fixed-title">{{fixedTitle}}</h1>
+    </div>
+
   </scroll>
 </template>
 
@@ -41,7 +46,8 @@ export default {
   data() {
     return {
       scrollY: -1,
-      currentIndex: 0
+      currentIndex: 0,
+      diff: 0
     }
   },
   props: {
@@ -55,6 +61,12 @@ export default {
       return this.data.map((item) => {
         return item.title.substr(0, 1)
       })
+    },
+    fixedTitle() {
+      if (this.scrollY > 0) {
+        return ''
+      }
+      return this.data[this.currentIndex]?this.data[this.currentIndex].title:''
     }
   },
   components: {
@@ -68,16 +80,33 @@ export default {
     },
     scrollY(newY) {
       const listHeight = this.listHeight
-      for (let i = 0; i < listHeight.length; i ++) {
+      // 滚到到顶部 newY > 0
+      if (newY > 0) {
+        this.currentIndex = 0
+        return
+      }
+
+      // 在中间滚到
+      for (let i = 0; i < listHeight.length - 1; i ++) {
         let height1 = listHeight[i]
         let height2 = listHeight[i + 1]
-        if (!height2 || (-newY > height1 && -newY < height2)) {
+        if (-newY >= height1 && -newY < height2) {
           this.currentIndex = i
-          console.log(i);
+          this.diff = height2 + newY
           return
         }
       }
-      this.currentIndex = 0
+
+      // 滚到到底部 -newY大于最后一个元素的上限
+      this.currentIndex = listHeight.length - 2
+    },
+    diff(newValue) {
+      let fixedTop = (newValue > 0 && newValue < 30) ? newValue - 30 : 0
+      if (this.fixedTop == fixedTop) {
+        return
+      }
+      this.fixedTop = fixedTop      
+      // this.$refs.fixed.style.transform = `translate3d(0, ${fixedTop}px, 0)`
     }
   },
   methods: {
@@ -153,6 +182,8 @@ export default {
       z-index 30
       right 0
       top 50%
+      padding-top 10px
+      padding-bottom 10px
       transform translateY(-50%)
       width 20px
       text-align center
@@ -164,6 +195,19 @@ export default {
         font-size $font-size-small
         &.current
           color $color-theme
+    .list-fixed
+      position absolute
+      width 100%
+      top 0
+      left 0
+      z-index 
+      .fixed-title
+        height: 30px
+        line-height: 30px
+        padding-left: 20px
+        font-size: $font-size-small
+        color: $color-text-l
+        background: $color-highlight-background
 
   
 </style>

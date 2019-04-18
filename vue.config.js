@@ -16,6 +16,7 @@ module.exports = {
         '@': resolve('src'),
       }
     },
+    devtool: 'source-map'
   },
   devServer: {
     // 配置代理
