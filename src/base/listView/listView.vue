@@ -9,7 +9,7 @@
       <li class="list-group" v-for="group in data" :key="group.title" ref="listGroup">
         <p class="list-group-title">{{group.title}}</p>
         <ul>
-          <li class="list-group-item" v-for="item in group.items" :key="item.id">
+          <li @click="selectItem(item)" class="list-group-item" v-for="item in group.items" :key="item.id">
             <img class="avatar" v-lazy="item.avatar" alt="">
             <p class="name">{{item.name}}</p>
           </li>
@@ -29,12 +29,17 @@
       <h1 class="fixed-title">{{fixedTitle}}</h1>
     </div>
 
+    <div class="loading-container" v-show="!data.length">
+      <loading></loading>
+    </div>
+
   </scroll>
 </template>
 
 <script>
 
 import Scroll from '@/base/scroll/scroll'
+import Loading from '@/base/loading/loading'
 
 export default {
   created() {
@@ -70,7 +75,8 @@ export default {
     }
   },
   components: {
-    Scroll
+    Scroll,
+    Loading
   },
   watch: {
     data() {
@@ -129,6 +135,9 @@ export default {
     },
     scroll(pos) {
       this.scrollY = pos.y
+    },
+    selectItem(item) {
+      this.$emit('select', item)
     },
     _scrollTo(index) {
       this.$refs.listview.scrollToElement(this.$refs.listGroup[index], 0)
@@ -200,7 +209,6 @@ export default {
       width 100%
       top 0
       left 0
-      z-index 
       .fixed-title
         height: 30px
         line-height: 30px
@@ -208,6 +216,10 @@ export default {
         font-size: $font-size-small
         color: $color-text-l
         background: $color-highlight-background
-
+    .loading-container
+      position absolute
+      top 50%
+      width 100%
+      transform translateY(-50%)
   
 </style>
